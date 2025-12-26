@@ -1,4 +1,5 @@
-# Contributing to Qloud ☁️
+# Contributing to Qloud <img width="48" height="48" alt="image" src="https://github.com/user-attachments/assets/cb5a20a5-caa6-4568-98c5-b87b674523f2" />
+
 
 Thanks for your interest in contributing to **Qloud**!  
 Qloud is a token-based cloud storage project built with Cloudinary and Vercel.
