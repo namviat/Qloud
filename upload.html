@@ -153,17 +153,40 @@
     .app{ margin-left:calc(var(--sidebar-collapsed-w) + var(--gap)); padding:16px; }
     .feature-panel{right:10px;width:320px;}
   }
-  @media (max-width:1024px){
-  /* Disable hover behavior on mobile */
-  .sidebar:hover {
-    width: var(--sidebar-collapsed-w);
+  /* =========================
+   Mobile Sidebar Toggle (Top)
+========================= */
+
+/* Default: desktop */
+.mobile-toggle {
+  display: none;
+}
+
+/* Mobile / tablet */
+@media (max-width:1024px) {
+  /* Hide avatar on mobile */
+  .avatar {
+    display: none;
   }
 
-  /* Smooth expand/collapse on tap */
-  .sidebar {
-    transition: width .35s cubic-bezier(.175,.885,.32,1.1);
+  /* Show 3-dot button */
+  .mobile-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: transparent;
+    color: #475569;
+    cursor: pointer;
+  }
+
+  .mobile-toggle:hover {
+    background: #f1f5f9;
   }
 }
+
 
   /* hide horizontal scrollbars visually (extra) */
   .sidebar::-webkit-scrollbar { height: 0; width: 8px; }
@@ -190,14 +213,12 @@
 <!-- SIDEBAR -->
 <aside id="sidebar" class="sidebar collapsed" aria-label="Qloud sidebar">
   <div class="sidebar-header">
-    <div class="avatar" id="avatarPreview">U</div>
-    <!-- Mobile sidebar toggle -->
-<button id="mobileSidebarToggle"
-  class="ml-auto p-2 rounded-md text-slate-600 hover:bg-slate-100 lg:hidden"
-  aria-label="Toggle sidebar">
-  <i data-lucide="more-vertical"></i>
-</button>
-
+    <div class="avatar" id="avatarPreview">☯</div>
+      <button id="mobileSidebarToggle"
+    class="mobile-toggle"
+    aria-label="Toggle sidebar">
+    <i data-lucide="more-vertical"></i>
+  </button>
     <div class="profile-block label" style="min-width:0;">
       <div class="profile-name-row">
         <div id="profileName" class="profile-name" title="Click pencil to edit">TOKEN</div>
@@ -334,7 +355,8 @@ function applySidebarHoverBehavior(){
   });
 }
 applySidebarHoverBehavior();
-  /* =========================
+
+/* =========================
    Mobile Sidebar Toggle Logic
 ========================= */
 
@@ -344,17 +366,12 @@ if (mobileToggle) {
   mobileToggle.addEventListener('click', (e) => {
     e.stopPropagation();
 
-    // Toggle collapsed state manually on mobile
+    // Toggle same collapsed state used by desktop hover
     sidebar.classList.toggle('collapsed');
   });
 }
 
-/* Prevent hover logic from fighting mobile tap */
-function isMobile() {
-  return window.innerWidth <= 1024;
-}
-
-
+  
 /* messages */
 function showMsg(text, type='info'){
   msgEl.textContent = text;
