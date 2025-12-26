@@ -45,7 +45,7 @@
   .sidebar.collapsed{ width:var(--sidebar-collapsed-w); }
 
   .sidebar-header{ display:flex; gap:12px; align-items:center; padding:16px; }
-  .avatar{ width:44px; height:44px; border-radius:10px; background:#eef2ff; display:flex;align-items:center;justify-content:center;font-weight:700;color:#374151; flex-shrink:0; }
+  .avatar{ width:44px; height:44px;background:#eef2ff; display:flex;align-items:center;justify-content:center;font-weight:700;color:#000000; flex-shrink:0; }
   .profile-block{ display:flex; flex-direction:column; gap:2px; min-width:0; }
   .profile-name-row{ display:flex; align-items:center; gap:8px; }
   .profile-name{ font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:140px; }
@@ -162,6 +162,7 @@
   }    .app{ margin-left:calc(var(--sidebar-collapsed-w) + var(--gap)); padding:16px; }
     .feature-panel{right:10px;width:320px;}
   }
+  
   /* =========================
    Mobile Sidebar Toggle (Top)
 ========================= */
@@ -195,8 +196,12 @@
     background: #f1f5f9;
   }
 }
-
-
+@media (min-width:1025px) {
+  .avatar {
+    font-size: 40px;   
+    line-height: 1;
+  }
+}
   /* hide horizontal scrollbars visually (extra) */
   .sidebar::-webkit-scrollbar { height: 0; width: 8px; }
   .sidebar::-webkit-scrollbar-thumb { background: rgba(2,6,23,0.06); border-radius: 999px; }
@@ -610,7 +615,6 @@ function debounce(fn, wait=350){ let t; return function(...args){ clearTimeout(t
 function renderSearchFeature(){
   featurePanel.innerHTML = `
     <h3 class="text-lg font-semibold mb-3">Token Search</h3>
-    <div class="text-sm text-slate-500 mb-3">Search tokens by id or name. Select a token to view its files and copy individual files into this token.</div>
     <input id="searchInput" placeholder="Search tokens..." class="w-full p-2 border border-slate-100 rounded mb-3" />
     <div id="searchResults" class="space-y-2 mb-3"></div>
     <div id="tokenFilesTitle" class="text-sm font-semibold mt-2 mb-2 hidden"></div>
@@ -831,7 +835,6 @@ function renderDeleteFeature(){
   });
 
   btn.addEventListener('click', async ()=> {
-    if (!confirm('Delete this token and all its files? This is irreversible.')) return;
     try {
       const res = await fetch('/api/delete-token', { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ token }) });
       if (!res.ok) throw new Error(await res.text());
