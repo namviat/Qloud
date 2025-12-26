@@ -14,6 +14,29 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -100%;
+    top: 0;
+    bottom: 0;
+    width: 80%;
+    max-width: 300px;
+    border-radius: 0;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.mobile-open {
+    left: 0;
+  }
+
+  .app {
+    margin-left: 0 ! important;
+    padding: 16px;
+  }
+}
+
+  
   :root{
     --sidebar-w:270px;
     --sidebar-collapsed-w:88px;
@@ -172,6 +195,11 @@
 </style>
 </head>
 <body>
+  <button id="mobileMenuBtn"
+  class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-lg shadow">
+  ☰
+</button>
+
 
 <!-- FLOATING TOOLTIP (attached to body via JS) -->
 <div id="tooltipFloater" class="tooltip-floater" style="display:none;"></div>
@@ -775,6 +803,10 @@ function renderDeleteFeature(){
     }
   });
 }
+const mobileBtn = document.getElementById('mobileMenuBtn');
+mobileBtn.addEventListener('click', () => {
+  sidebar.classList.toggle('mobile-open');
+});
 
 /* logout */
 logoutBtn.addEventListener('click', ()=> location.href='index.html');
