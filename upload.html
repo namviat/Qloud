@@ -351,8 +351,12 @@ let files = [];
 /* ---------------- Sidebar hover behavior ---------------- */
 function applySidebarHoverBehavior(){
     sidebar.classList.add('collapsed');
-  if (window.innerWidth >= 1024) sidebar.classList.add('collapsed'); else sidebar.classList.remove('collapsed');
-
+  document.addEventListener('click', (e) => {
+  if (window.innerWidth > 1024) return;
+  if (!sidebar.contains(e.target)) {
+    sidebar.classList.add('collapsed');
+  }
+});
   sidebar.addEventListener('mouseenter', ()=> {
     if (window.innerWidth >= 1024) { sidebar.classList.remove('collapsed'); }
   });
