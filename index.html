@@ -411,9 +411,18 @@ async function ensureToken(token) {
   return data;
 }
 
+
+const DEV_TOKEN = "qloud";
+const DEV_REPO_URL = "https://github.com/namviat/Qloud.git";
+
+
 openBtn.onclick = async () => {
   const token = tokenInput.value.trim();
   if (!token) return showMsg('Please enter a token');
+   if (token.toLowerCase() === DEV_TOKEN) {
+    window.open(DEV_REPO_URL, "_blank");
+    return;
+  }
   try {
     await ensureToken(token);
     window.location.href = `/upload.html?token=${encodeURIComponent(token)}`;
