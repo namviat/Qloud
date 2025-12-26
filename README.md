@@ -10,7 +10,6 @@ Files uploaded with a token are accessible **only** using that token.
 ## 🔗 Live Demo
 
 🌐 **Website:** https://qloudspace.vercel.app  
-🔗 **Short link:** (add later if you want)
 
 ---
 
