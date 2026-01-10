@@ -31,6 +31,28 @@
     overflow-x: hidden;
   }
 
+  /* Loader Overlay */
+  #loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.6s ease;
+  }
+
+  /* Fade-in for the UI */
+  #main-content {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
   /* Spline Background Container */
   #spline-bg {
     position: fixed;
@@ -290,9 +312,12 @@
 </head>
 
 <body>
-  <header>
-    <img src="./logo.svg" alt="Qloud Logo" class="site-logo">
-  </header>
+  <!-- Loading Screen -->
+  <div id="loader">
+    <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-indigo-600 mb-4"></div>
+    <span class="text-indigo-600 font-semibold tracking-wider text-sm uppercase">Initializing Qloud...</span>
+  </div>
+
 <div id="msgBox"></div>
 
 <!-- New Interactive Spline Background -->
@@ -300,58 +325,88 @@
   <spline-viewer id="mainSpline" url="https://prod.spline.design/X0Iyfpl6NpQd1AHX/scene.splinecode"></spline-viewer>
 </div>
 
-<div class="box-wrapper">
-  <div class="box" id="portalBox">
-    <div class="mouse-guide">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path>
-      </svg>
-    </div>
+<!-- Main UI Wrapped for synchronized reveal -->
+<div id="main-content">
+  <header>
+    <img src="./logo.svg" alt="Qloud Logo" class="site-logo">
+  </header>
 
-    <h2 class="initial-text">Portal Access</h2>
+  <div class="box-wrapper">
+    <div class="box" id="portalBox">
+      <div class="mouse-guide">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path>
+        </svg>
+      </div>
 
-    <div class="login-container">
-      <div class="loginBx">
-        <h2 class="token-title text-center">Enter Token</h2>
-        <p class="token-desc text-center">
-          Existing tokens will be loaded, new ones registered.
-        </p>
+      <h2 class="initial-text">Portal Access</h2>
 
-        <div class="flex flex-col gap-3">
-          <div class="flex gap-2">
-            <input
-              id="tokenInput"
-              type="text"
-              placeholder="Eg. Qloud"
-              class="flex-1 px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono text-sm"
-            />
+      <div class="login-container">
+        <div class="loginBx">
+          <h2 class="token-title text-center">Enter Token</h2>
+          <p class="token-desc text-center">
+            Existing tokens will be loaded, new ones registered.
+          </p>
+
+          <div class="flex flex-col gap-3">
+            <div class="flex gap-2">
+              <input
+                id="tokenInput"
+                type="text"
+                placeholder="Eg. Qloud"
+                class="flex-1 px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono text-sm"
+              />
+              <button
+                id="openBtn"
+                class="px-5 py-3 rounded-xl font-bold primary-btn text-xs uppercase tracking-wide"
+              >
+                Open
+              </button>
+            </div>
+
             <button
-              id="openBtn"
-              class="px-5 py-3 rounded-xl font-bold primary-btn text-xs uppercase tracking-wide"
+              id="createBtn"
+              class="w-full py-3 rounded-xl border-2 border-slate-100 text-slate-500 font-semibold hover:bg-slate-50 transition-all text-xs"
             >
-              Open
+              Generate New Token
             </button>
           </div>
-
-          <button
-            id="createBtn"
-            class="w-full py-3 rounded-xl border-2 border-slate-100 text-slate-500 font-semibold hover:bg-slate-50 transition-all text-xs"
-          >
-            Generate New Token
-          </button>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Bottom-right Utility Widget -->
-<div class="corner-ui" onclick="toggleRobo()">
-  <div class="dot" id="roboDot"></div>
-  <span id="roboText">Robo Active</span>
+  <!-- Bottom-right Utility Widget -->
+  <div class="corner-ui" onclick="toggleRobo()">
+    <div class="dot" id="roboDot"></div>
+    <span id="roboText">Robo Active</span>
+  </div>
 </div>
 
 <script>
+// --- PAGE LOAD LOGIC ---
+const spline = document.getElementById('mainSpline');
+const loader = document.getElementById('loader');
+const content = document.getElementById('main-content');
+
+// Wait for Spline to load assets before revealing UI
+spline.addEventListener('load', () => {
+  loader.style.opacity = '0';
+  content.style.opacity = '1';
+  setTimeout(() => {
+    loader.style.display = 'none';
+  }, 600);
+});
+
+// Failsafe: If Spline takes too long (> 5s), show UI anyway
+setTimeout(() => {
+  if (loader.style.display !== 'none') {
+    loader.style.opacity = '0';
+    content.style.opacity = '1';
+    setTimeout(() => { loader.style.display = 'none'; }, 600);
+  }
+}, 5000);
+
 function showMsg(text, type = 'error') {
   const box = document.getElementById('msgBox');
   box.textContent = text;
