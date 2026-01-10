@@ -393,6 +393,19 @@
   50% { transform: scale(0.95); }
 }
 
+@media (max-width: 768px) {
+  .site-logo {
+    height: 60px;
+    top: 16px;
+    left: 16px;
+  }
+  .box.is-focused ~ header .site-logo,
+  .box:hover ~ header .site-logo {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
  
 </style>
 </head>
