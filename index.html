@@ -308,15 +308,105 @@
     background: #22c55e;
     border-radius: 50%;
   transform: translateY(0.5px);  }
+/* =======================
+   QLOUD ORBITAL LOADER
+   ======================= */
+
+:root {
+  --dot-color: #5d55e5;
+
+  --dot-small:10px;
+  --dot-medium: 10px;
+  --dot-large: 40px;
+
+  --orbit-radius: 34px;
+  --anim-scale: 1.8;
+  --anim-speed: 2.2s;
+}
+
+.qloud-logo {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dot {
+  position: absolute;
+  background: var(--dot-color);
+  border-radius: 50%;
+}
+
+.d1 {
+  width: var(--dot-small);
+  height: var(--dot-small);
+  animation: orbitA var(--anim-speed) ease-in-out infinite;
+}
+
+.d2 {
+  width: var(--dot-large);
+  height: var(--dot-large);
+  z-index: 2;
+  animation: pulseCenter var(--anim-speed) ease-in-out infinite;
+}
+
+.d3 {
+  width: var(--dot-medium);
+  height: var(--dot-medium);
+  animation: orbitB var(--anim-speed) ease-in-out infinite;
+}
+
+@keyframes orbitA {
+  0% {
+    transform: rotate(-135deg) translateX(var(--orbit-radius)) rotate(135deg) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: rotate(45deg) translateX(var(--orbit-radius)) rotate(-45deg) scale(var(--anim-scale));
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(225deg) translateX(var(--orbit-radius)) rotate(-225deg) scale(1);
+    opacity: 0.7;
+  }
+}
+
+@keyframes orbitB {
+  0% {
+    transform: rotate(45deg) translateX(var(--orbit-radius)) rotate(-45deg) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: rotate(225deg) translateX(var(--orbit-radius)) rotate(-225deg) scale(var(--anim-scale));
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(405deg) translateX(var(--orbit-radius)) rotate(-405deg) scale(1);
+    opacity: 0.7;
+  }
+}
+
+@keyframes pulseCenter {
+  0%, 100% { transform: scale(1.1); }
+  50% { transform: scale(0.95); }
+}
+
+ 
 </style>
 </head>
 
 <body>
   <!-- Loading Screen -->
-  <div id="loader">
-    <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-indigo-600 mb-4"></div>
-    <span class="text-indigo-600 font-semibold tracking-wider text-sm uppercase">Initializing Qloud...</span>
+<div id="loader">
+  <div class="qloud-logo mb-6">
+    <span class="dot d1"></span>
+    <span class="dot d2"></span>
+    <span class="dot d3"></span>
   </div>
+</div>
+
 
 <div id="msgBox"></div>
 
