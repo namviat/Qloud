@@ -602,6 +602,10 @@ openBtn.onclick = async () => {
   }
 };
 
+ tokenInput.onkeydown = (e) => {
+  if (e.key === "Enter") openBtn.click();
+};
+
 createBtn.onclick = async () => {
   const token = generateCoolAnimeToken();
   tokenInput.value = token;
