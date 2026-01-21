@@ -400,6 +400,11 @@
     left: 16px;
   }
 
+  .box:hover, .box.is-focused {
+   width:330px;
+   height:246px;
+  }
+
   .box-wrapper:has(.box:hover) ~ header .site-logo,
   .box-wrapper:has(.box.is-focused) ~ header .site-logo {
     opacity: 0;
