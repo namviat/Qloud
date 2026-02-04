@@ -670,13 +670,19 @@ openBtn.onclick = async () => {
 
 createBtn.onclick = async () => {
   const token = generateCoolAnimeToken();
-  tokenInput.value = token;
+  realValue = token;
+  if (secureMode) {
+    maskAll();
+  } else {
+    tokenInputField.value = token;
+  }
   try {
     await ensureToken(token);
   } catch (e) {
     showMsg('Failed to create new token');
   }
 };
+
  const tokenInputField = document.getElementById("tokenInput");
 const toggleBtn = document.getElementById("togglePassword");
 const slash = document.getElementById("eyeSlash");
@@ -713,9 +719,14 @@ tokenInputField.addEventListener("input", (e) => {
 
   }
   else {
-    realValue = realValue.slice(0, newVal.length);
+  realValue = realValue.slice(0, newVal.length);
+  if (secureMode) {
     maskAll();
+  } else {
+    tokenInputField.value = realValue;
   }
+}
+
 });
 
 function maskAll() {
