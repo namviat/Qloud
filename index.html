@@ -398,16 +398,18 @@
     height: 90px;
     top: 16px;
     left: 16px;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
   }
   .box:hover, .box.is-focused {
-   width:330px;
-   height:246px;
+    width: 330px;
+    height: 246px;
   }
-.box-wrapper:has(.box:hover) + header .site-logo,
-  .box-wrapper:has(.box.is-focused) + header .site-logo {
+  .box-wrapper:has(.box:hover) ~ header .site-logo,
+  .box-wrapper:has(.box.is-focused) ~ header .site-logo {
     opacity: 0;
-    visibility: hidden;  }
-
+    visibility: hidden;
+    pointer-events: none;
+  }
 }
 
 .eye-toggle {
