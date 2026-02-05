@@ -623,11 +623,14 @@ const createBtn = document.getElementById('createBtn');
 // Prevent portal collapse when focused
 tokenInput.addEventListener('focus', () => {
   portalBox.classList.add('is-focused');
+  document.body.classList.add('portal-open');
 });
 
 tokenInput.addEventListener('blur', () => {
   portalBox.classList.remove('is-focused');
+  document.body.classList.remove('portal-open');
 });
+
 
 async function ensureToken(token) {
   const res = await fetch('/api/token', {
