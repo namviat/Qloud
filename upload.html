@@ -14,6 +14,78 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
+  /* ─────────────────────────────
+   QLOUD MINIMAL PREVIEW
+───────────────────────────── */
+
+#previewOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: rgba(15, 23, 42, 0.35); /* soft slate tint */
+}
+
+#previewOverlay.show {
+  display: flex;
+}
+
+#previewMedia {
+  max-width: 80vw;
+  max-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Media elements */
+#previewMedia img,
+#previewMedia video,
+#previewMedia iframe,
+#previewMedia audio {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 14px;
+  background: transparent;
+}
+
+/* Text preview */
+#previewMedia pre {
+  max-width: 80vw;
+  max-height: 80vh;
+  overflow: auto;
+  background: #0f172a;
+  color: #e5e7eb;
+  padding: 20px;
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ─────────────────────────────
+   CLICKABLE FILE ICON FEEDBACK
+───────────────────────────── */
+
+.preview-icon {
+  cursor: pointer;
+  transition: transform 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+
+.preview-icon:hover {
+  transform: scale(1.12);
+  color: #4f46e5; /* subtle indigo */
+}
+
+.preview-icon:active {
+  transform: scale(1.05);
+  opacity: 0.85;
+}
+
   :root{
     --sidebar-w:270px;
     --sidebar-collapsed-w:88px;
@@ -220,7 +292,9 @@
 </style>
 </head>
 <body>
-
+  <div id="previewOverlay">
+  <div id="previewMedia"></div>
+</div>
 <!-- FLOATING TOOLTIP (attached to body via JS) -->
 <div id="tooltipFloater" class="tooltip-floater" style="display:none;"></div>
 
@@ -442,7 +516,7 @@ function renderFiles(){
         <button class="file-action-btn download-btn" title="Download"><i data-lucide="download" class="w-4 h-4"></i></button>
         <button class="file-action-btn delete-btn" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
       </div>
-      <div class="text-3xl mb-2 text-indigo-500"><i data-lucide="${icon}"></i></div>
+      <div class="text-3xl mb-2 text-indigo-500 preview-icon"><i data-lucide="${icon}"></i></div>
       <div class="font-semibold truncate">${name}</div>
       <div class="text-xs text-slate-500 mt-1">${size} MB</div>
     `;
@@ -879,6 +953,92 @@ lucide.createIcons();
     },
     "retina_detect": true
   });
+
+  const previewOverlay = document.getElementById('previewOverlay');
+const previewMedia   = document.getElementById('previewMedia');
+
+function openPreview(file) {
+  const url  = file.secure_url;
+  const name = file.public_id.split('/').pop();
+  const ext  = name.split('.').pop().toLowerCase();
+
+  previewMedia.innerHTML = '';
+
+  let el;
+
+  // Images
+  if (['jpg','jpeg','png','gif','webp','svg'].includes(ext)) {
+    el = document.createElement('img');
+    el.src = url;
+  }
+
+  // Video
+  else if (['mp4','webm','mov','mkv','avi'].includes(ext)) {
+    el = document.createElement('video');
+    el.src = url;
+    el.controls = true;
+    el.autoplay = true;
+  }
+
+  // Audio
+  else if (['mp3','wav','ogg','aac','flac','m4a'].includes(ext)) {
+    el = document.createElement('audio');
+    el.src = url;
+    el.controls = true;
+    el.autoplay = true;
+  }
+
+  // PDF (IMPORTANT FIX)
+  else if (ext === 'pdf') {
+    el = document.createElement('iframe');
+    el.src = url;
+    el.loading = 'lazy';
+  }
+
+  // Text-based
+  else if (['txt','md','json','log','js','css','html','csv'].includes(ext)) {
+    fetch(url)
+      .then(r => r.text())
+      .then(text => {
+        const pre = document.createElement('pre');
+        pre.textContent = text.slice(0, 5 * 1024 * 1024);
+        previewMedia.appendChild(pre);
+      })
+      .catch(() => {
+        fallbackIframe(url);
+      });
+  }
+
+  // Any other file → let browser try
+  else {
+    fallbackIframe(url);
+  }
+
+  if (el) previewMedia.appendChild(el);
+
+  previewOverlay.classList.add('show');
+}
+
+function fallbackIframe(url) {
+  const iframe = document.createElement('iframe');
+  iframe.src = url;
+  previewMedia.appendChild(iframe);
+}
+
+// Close on click anywhere
+previewOverlay.addEventListener('click', () => {
+  previewOverlay.classList.remove('show');
+  previewMedia.innerHTML = '';
+});
+
+// ESC support
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    previewOverlay.classList.remove('show');
+    previewMedia.innerHTML = '';
+  }
+});
+
 </script>
   
 </body>
