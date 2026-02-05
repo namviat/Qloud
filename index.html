@@ -405,11 +405,11 @@
    height:246px;
   }
 
-  .box-wrapper:has(.box:hover) ~ header .site-logo,
-  .box-wrapper:has(.box.is-focused) ~ header .site-logo {
-    opacity: 0;
-    pointer-events: none;
-  }
+.box.is-focused ~ header .site-logo {
+  opacity: 0;
+  pointer-events: none;
+}
+
 }
 
 .eye-toggle {
