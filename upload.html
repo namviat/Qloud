@@ -522,6 +522,10 @@ function renderFiles(){
     `;
     card.querySelector('.download-btn').onclick = ()=> forceDownload(f.secure_url, name);
     card.querySelector('.delete-btn').onclick = ()=> deleteFile(f.public_id);
+    const iconEl = card.querySelector('.preview-icon');iconEl.addEventListener('click', e => {e.stopPropagation();
+  openPreview(f);
+});
+
     fileGrid.appendChild(card);
   });
   lucide.createIcons();
