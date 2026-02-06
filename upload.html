@@ -1032,50 +1032,6 @@ document.addEventListener('keydown', e => {
     previewMedia.innerHTML = '';
   }
 });
-/* =========================
-   MOBILE SIDEBAR — CLICK ONLY
-   (PC behavior unchanged)
-========================= */
-
-const sidebar = document.getElementById('sidebar');
-const mobileToggle = document.getElementById('mobileSidebarToggle');
-
-const isMobile = () => window.innerWidth <= 1024;
-
-/* Mobile: always start collapsed */
-if (isMobile()) {
-  sidebar.classList.add('collapsed');
-}
-
-/* Mobile: toggle ONLY on button click */
-mobileToggle.addEventListener('click', (e) => {
-  if (!isMobile()) return;
-  e.stopPropagation();
-  sidebar.classList.toggle('collapsed');
-});
-
-/* Mobile: close when tapping outside */
-document.addEventListener('click', (e) => {
-  if (!isMobile()) return;
-  if (!sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
-    sidebar.classList.add('collapsed');
-  }
-});
-
-/* Mobile: block hover */
-sidebar.addEventListener('mouseenter', () => {
-  if (isMobile()) return;
-});
-
-sidebar.addEventListener('mouseleave', () => {
-  if (isMobile()) return;
-});
-
-window.addEventListener('resize', () => {
-  if (isMobile()) {
-    sidebar.classList.add('collapsed');
-  }
-});
 
 </script>
   
