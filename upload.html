@@ -51,6 +51,14 @@
   background: transparent;
 }
 
+#previewMedia iframe {
+  width: 80vw;
+  height: 80vh;
+  border: none;
+  border-radius: 12px;
+  background: white;
+}
+  
 /* Text preview */
 #previewMedia pre {
   max-height: 100vh;
@@ -952,76 +960,64 @@ lucide.createIcons();
     "retina_detect": true
   });
 
+function openPreview(f) {
   const previewOverlay = document.getElementById('previewOverlay');
-const previewMedia   = document.getElementById('previewMedia');
-
-function openPreview(file) {
-  const url  = file.secure_url;
-  const name = file.public_id.split('/').pop();
-  const ext  = name.split('.').pop().toLowerCase();
+  const previewMedia = document.getElementById('previewMedia');
+  const url = f.secure_url;
+  const ext = (f.public_id.split('.').pop() || '').toLowerCase();
 
   previewMedia.innerHTML = '';
-
-  let el;
+  let el = null;
 
   // Images
-  if (['jpg','jpeg','png','gif','webp','svg'].includes(ext)) {
+  if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(ext)) {
     el = document.createElement('img');
     el.src = url;
   }
-
   // Video
-  else if (['mp4','webm','mov','mkv','avi'].includes(ext)) {
+  else if (['mp4', 'mkv', 'avi', 'mov', 'webm'].includes(ext)) {
     el = document.createElement('video');
     el.src = url;
     el.controls = true;
     el.autoplay = true;
   }
-
   // Audio
-  else if (['mp3','wav','ogg','aac','flac','m4a'].includes(ext)) {
+  else if (['mp3', 'wav', 'ogg', 'aac', 'flac', 'm4a'].includes(ext)) {
     el = document.createElement('audio');
     el.src = url;
     el.controls = true;
     el.autoplay = true;
   }
-
-  // PDF (IMPORTANT FIX)
+  // PDF - The Google Docs Viewer prevents the "Automatic Download" behavior
   else if (ext === 'pdf') {
     el = document.createElement('iframe');
-    el.src = url;
-    el.loading = 'lazy';
+    el.src = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
   }
-
   // Text-based
-  else if (['txt','md','json','log','js','css','html','csv'].includes(ext)) {
+  else if (['txt', 'md', 'json', 'js', 'css', 'html', 'csv'].includes(ext)) {
     fetch(url)
       .then(r => r.text())
       .then(text => {
         const pre = document.createElement('pre');
-        pre.textContent = text.slice(0, 5 * 1024 * 1024);
+        pre.textContent = text.slice(0, 5 * 1024 * 1024); // 5MB limit
         previewMedia.appendChild(pre);
       })
-      .catch(() => {
-        fallbackIframe(url);
-      });
+      .catch(() => fallbackIframe(url));
   }
-
-  // Any other file → let browser try
   else {
     fallbackIframe(url);
   }
 
   if (el) previewMedia.appendChild(el);
-
   previewOverlay.classList.add('show');
 }
 
 function fallbackIframe(url) {
   const iframe = document.createElement('iframe');
   iframe.src = url;
-  previewMedia.appendChild(iframe);
+  document.getElementById('previewMedia').appendChild(iframe);
 }
+
 
 // Close on click anywhere
 previewOverlay.addEventListener('click', () => {
