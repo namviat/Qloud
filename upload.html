@@ -519,7 +519,7 @@ function renderFiles(){
       </div>
       <div class="text-3xl mb-2 text-indigo-500 preview-icon"><i data-lucide="${icon}"></i></div>
       <div class="font-semibold truncate">${name}</div>
-      <div class="text-xs text-slate-500 mt-1">${size} MB</div>
+      <div class="text-xs text-slate-500 mt-1 text-right">${size} MB</div>
     `;
     card.querySelector('.download-btn').onclick = ()=> forceDownload(f.secure_url, name);
     card.querySelector('.delete-btn').onclick = ()=> deleteFile(f.public_id);
