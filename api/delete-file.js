@@ -13,9 +13,9 @@ module.exports = async (req, res) => {
   }
 
   // Cloudinary credentials from Vercel Environment Variables
-  const CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME || 'dzvz7kzin';
-  const API_KEY = process.env.CLOUDINARY_API_KEY || '484797141727837';
-  const API_SECRET = process.env.CLOUDINARY_API_SECRET || '0AhRs9vHrqghA5ZcXRyMckXlGjk';
+  const CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME ;
+  const API_KEY = process.env.CLOUDINARY_API_KEY ;
+  const API_SECRET = process.env.CLOUDINARY_API_SECRET ;
 
   // Configure Cloudinary with your credentials
   cloudinary.config({
@@ -40,3 +40,4 @@ module.exports = async (req, res) => {
     res.status(500).json({ error: error.message || 'An error occurred during file deletion.' });
   }
 };
+
