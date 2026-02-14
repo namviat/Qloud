@@ -350,11 +350,30 @@
   box-shadow: 0 8px 20px rgba(185,28,28,0.2);
   transform: translateY(-2px);
 }  
-.sticky-header{
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial;
+  background: var(--bg);
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden; 
+}
+.app {
+  margin-left: calc(var(--sidebar-w) + var(--gap));
+  padding: 0 32px 32px 32px; 
+  transition: margin .25s ease;
+    height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 28px, black 29px);
+  mask-image: linear-gradient(to bottom, transparent 28px, black 29px);
+}
+  .sticky-header {
   position: sticky;
-  top: 28px;
+  top: 28px; 
   z-index: 40;
-} 
+  margin-top: 28px; 
+}
 </style>
 </head>
 <body>
